@@ -21,6 +21,9 @@ def main():
 	asteroids = pygame.sprite.Group()
 	shots = pygame.sprite.Group()
 
+	score = 0
+	font = 
+
 	Player.containers = (updatable, drawable)
 	player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
@@ -51,6 +54,7 @@ def main():
 			for shot in shots:
 				if shot.collides_with(asteroid):
 					log_event("asteroid_shot")
+					score += 100
 					asteroid.split()
 					shot.kill()
 
