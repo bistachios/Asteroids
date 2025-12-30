@@ -22,7 +22,7 @@ def main():
 	shots = pygame.sprite.Group()
 
 	score = 0
-	font = 
+	font = pygame.font.Font("assets/fonts/Orbitron.ttf", 36)
 
 	Player.containers = (updatable, drawable)
 	player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
@@ -62,6 +62,9 @@ def main():
 
 		for obj in drawable:
 			obj.draw(screen)
+
+		score_surf = font.render(f"Score: {score}", True, "white")
+		screen.blit(score_surf, (10, 10))
 
 		pygame.display.flip()
 		dt = clock.tick(60) / 1000
