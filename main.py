@@ -3,7 +3,7 @@ from player import Player
 from asteroid import Asteroid
 from shot import Shot
 from asteroidfield import AsteroidField
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, PLAYER_RADIUS, LINE_WIDTH
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT, PLAYER_RADIUS, LINE_WIDTH, PLAYER_IFRAME_DURATION
 from logger import log_state, log_event
 import sys
 
@@ -22,6 +22,8 @@ def main():
 	shots = pygame.sprite.Group()
 
 	score = 0
+	shield = 100
+	player_invincible_timer = 0
 	font = pygame.font.Font("assets/fonts/Orbitron.ttf", 36)
 
 	Player.containers = (updatable, drawable)
@@ -43,12 +45,19 @@ def main():
         			return
 
 		updatable.update(dt)
+		
+		if player_invincible_timer > 0:
+			player_invincible_timer -=1
 
 		for obj in asteroids:
-			if obj.collides_with(player):
+			if obj.collides_with(player) and player_invincible_timer <= 0:
 				log_event("player_hit")
-				print("Game over!")
-				sys.exit()
+				obj.kill()
+				shield -= 25
+				player_invincible_timer = PLAYER_IFRAME_DURATION
+				if shield == 0:
+					print("Game over!")
+					sys.exit()
 
 		for asteroid in asteroids:
 			for shot in shots:
@@ -65,6 +74,15 @@ def main():
 
 		score_surf = font.render(f"Score: {score}", True, "white")
 		screen.blit(score_surf, (10, 10))
+
+
+		if shield > 25:
+			shield_surf = font.render(f"Shield: {shield}%", True, "white")
+		else:
+			shield_surf = font.render(f"Shield: {shield}%", True, "red")
+		x_pos = SCREEN_WIDTH - shield_surf.get_width() - 10
+		y_pos = 10
+		screen.blit(shield_surf, (x_pos, y_pos))
 
 		pygame.display.flip()
 		dt = clock.tick(60) / 1000
