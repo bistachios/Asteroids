@@ -13,6 +13,8 @@ def main():
 
 	pygame.init()
 	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+	background = pygame.image.load("assets/images/spaceBG1.jpg")
+	background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
 	clock = pygame.time.Clock()
 	dt = 0
 
@@ -67,7 +69,7 @@ def main():
 					asteroid.split()
 					shot.kill()
 
-		screen.fill("black")
+		screen.blit(background, (0, 0))
 
 		for obj in drawable:
 			obj.draw(screen)
