@@ -45,8 +45,8 @@ def main():
         			return
 
 			if game_state == "MENU":
-				if event.type == pygame.KEYDOWN:
-					if event.key in (pygame.K_RETURN, pygame.K_SPACE):
+				if event.type == pygame.KEYUP:
+					if event.key == pygame.K_SPACE:
 						game_state = "GAME"
 
 		if game_state == "GAME":
@@ -62,8 +62,7 @@ def main():
 					shield -= 25
 					player_invincible_timer = PLAYER_IFRAME_DURATION
 					if shield == 0:
-						print("Game over!")
-						sys.exit()
+						game_state = "OVER"
 
 			for asteroid in asteroids:
 				for shot in shots:
@@ -73,6 +72,13 @@ def main():
 						asteroid.split()
 						shot.kill()
 
+		if game_state == "OVER":
+			if event.type == pygame.KEYUP:
+				if event.key == pygame.K_SPACE:
+					game_state = "GAME"
+				elif event.key == pygame.K_x:
+					sys.exit()
+
 		screen.blit(background, (0, 0))
 
 		if game_state == "MENU":
@@ -80,7 +86,7 @@ def main():
 				small_font = pygame.font.Font("assets/fonts/Orbitron.ttf", 32)
 
 				title_surf = title_font.render("ASTEROIDS", True, "white")
-				prompt_surf = small_font.render("Press ENTER or SPACE to start", True, "white")
+				prompt_surf = small_font.render("Press SPACE to start", True, "white")
 
 				title_rect = title_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 60))
 				prompt_rect = prompt_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 10))
@@ -104,6 +110,22 @@ def main():
 				x_pos = SCREEN_WIDTH - shield_surf.get_width() - 10
 				y_pos = 10
 				screen.blit(shield_surf, (x_pos, y_pos))
+
+		elif game_state == "OVER":
+			title_font = pygame.font.Font("assets/fonts/Orbitron.ttf", 72)
+			small_font = pygame.font.Font("assets/fonts/Orbitron.ttf", 32)
+
+			title_surf = title_font.render("GAME OVER", True, "white")
+			prompt_surf = small_font.render("Press SPACE to retry", True, "white")
+			prompt2_surf = small_font.render("Press X to quit", True, "white")
+
+			title_rect = title_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 60))
+			prompt_rect = prompt_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 10))
+			prompt2_rect = prompt2_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
+
+			screen.blit(title_surf, title_rect)
+			screen.blit(prompt_surf, prompt_rect)
+			screen.blit(prompt2_surf, prompt2_rect)
 
 		pygame.display.flip()
 		dt = clock.tick(60) / 1000
