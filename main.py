@@ -75,6 +75,8 @@ def main():
 		if game_state == "OVER":
 			if event.type == pygame.KEYUP:
 				if event.key == pygame.K_SPACE:
+					shield = 100
+					score = 0
 					game_state = "GAME"
 				elif event.key == pygame.K_x:
 					sys.exit()
@@ -116,14 +118,17 @@ def main():
 			small_font = pygame.font.Font("assets/fonts/Orbitron.ttf", 32)
 
 			title_surf = title_font.render("GAME OVER", True, "white")
+			score_surf = small_font.render(f"High Score: {score}", True, "white")
 			prompt_surf = small_font.render("Press SPACE to retry", True, "white")
 			prompt2_surf = small_font.render("Press X to quit", True, "white")
 
 			title_rect = title_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 60))
-			prompt_rect = prompt_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 10))
-			prompt2_rect = prompt2_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
+			score_rect = score_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 10))
+			prompt_rect = prompt_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
+			prompt2_rect = prompt2_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 90))
 
 			screen.blit(title_surf, title_rect)
+			screen.blit(score_surf, score_rect)
 			screen.blit(prompt_surf, prompt_rect)
 			screen.blit(prompt2_surf, prompt2_rect)
 
