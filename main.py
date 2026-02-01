@@ -22,6 +22,7 @@ def main():
 	shots = pygame.sprite.Group()
 
 	score = 0
+	highscore = 0
 	shield = 100
 	player_invincible_timer = 0
 	font = pygame.font.Font("assets/fonts/Orbitron.ttf", 36)
@@ -73,6 +74,8 @@ def main():
 						shot.kill()
 
 		if game_state == "OVER":
+			if score > highscore:
+				highscore = score
 			if event.type == pygame.KEYUP:
 				if event.key == pygame.K_SPACE:
 					shield = 100
@@ -118,17 +121,20 @@ def main():
 			small_font = pygame.font.Font("assets/fonts/Orbitron.ttf", 32)
 
 			title_surf = title_font.render("GAME OVER", True, "white")
-			score_surf = small_font.render(f"High Score: {score}", True, "white")
+			score_surf = small_font.render(f"Score: {score}", True, "white")
+			highscore_surf = small_font.render(f"High Score: {highscore}", True, "white")
 			prompt_surf = small_font.render("Press SPACE to retry", True, "white")
 			prompt2_surf = small_font.render("Press X to quit", True, "white")
 
 			title_rect = title_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 60))
 			score_rect = score_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 10))
-			prompt_rect = prompt_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
-			prompt2_rect = prompt2_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 90))
+			highscore_rect = highscore_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 +50))
+			prompt_rect = prompt_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 90))
+			prompt2_rect = prompt2_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 130))
 
 			screen.blit(title_surf, title_rect)
 			screen.blit(score_surf, score_rect)
+			screen.blit(highscore_surf, highscore_rect)
 			screen.blit(prompt_surf, prompt_rect)
 			screen.blit(prompt2_surf, prompt2_rect)
 
